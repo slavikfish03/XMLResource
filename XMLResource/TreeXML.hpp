@@ -5,11 +5,9 @@
 
 class TreeXML {
 private:
-	std::unique_ptr<NodeXML> root;
+	std::unique_ptr<NodeXML> _root;
 public:
 	TreeXML();
-
-	
 
 	void PrintTree();
 
