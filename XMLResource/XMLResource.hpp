@@ -6,6 +6,8 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <tuple>
+#include <stack>
 
 class XMLResource {
 private:

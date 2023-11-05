@@ -2,6 +2,7 @@
 #include "NodeXML.hpp"
 
 #include <memory>
+#include <iostream>
 
 template <typename T>
 class IteratorXML : public std::iterator<std::input_iterator_tag, T> {
@@ -19,7 +20,7 @@ public:
 	typename IteratorXML::reference operator*() const;
 	IteratorXML& operator++();
 
-	IteratorXML& Upward(IteratorXML const& iter);
+	//IteratorXML& Upward(IteratorXML const& iter);
 };
 
 class TreeXML {
@@ -31,12 +32,21 @@ public:
 
 	TreeXML();
 
+
+
+	void AppendRoot(const std::string& tag, const std::string& value);
+
+	bool IsEmpty();
+
 	iterator begin();
 	iterator end();
 
 	const_iterator begin() const;
 	const_iterator end() const;
 
+	IteratorXML<NodeXML>& Find(const std::string& tag, const std::string& value);
+	IteratorXML<NodeXML>& Add(const std::string& tag, const std::string& value, const IteratorXML<NodeXML>& iter_add);
+	bool Erase(IteratorXML<NodeXML> iter_delete);
 
 	void PrintTree();
 

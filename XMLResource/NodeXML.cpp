@@ -1,9 +1,9 @@
 #include "NodeXML.hpp"
 
-NodeXML::NodeXML(const std::string& tag, const std::string& value, const PtrXmlNodes& children) {
+NodeXML::NodeXML(const std::string& tag, const std::string& value) {
 	_tag = tag;
 	_value = value;
-	_children = children;
+	_parent = nullptr;
 }
 
 //bool NodeXML::operator!=(NodeXML const& other_node) const {
@@ -30,6 +30,10 @@ NodeXML::NodeXML(const std::string& tag, const std::string& value, const PtrXmlN
 //	}
 //}
 
+void NodeXML::AppendChildren(std::shared_ptr<NodeXML> child) {
+	_children.push_back(child);
+}
+
 void NodeXML::SetTag(const std::string& new_tag) {
 	_tag = new_tag;
 }
@@ -38,9 +42,9 @@ void NodeXML::SetValue(const std::string& new_value) {
 	_value = new_value;
 }
 
-void NodeXML::SetChildren(const PtrXmlNodes& new_children) {
-	_children = new_children;
-}
+//void NodeXML::SetChildren(const PtrXmlNodes& new_children) {
+//	_children = new_children;
+//}
 
 void NodeXML::SetParent(const std::shared_ptr<NodeXML>& new_parent) {
 	_parent = new_parent;
@@ -54,10 +58,10 @@ std::string NodeXML::GetValue() const {
 	return _value;
 }
 
-PtrXmlNodes NodeXML::GetChildren() const {
+PtrXmlNodes& NodeXML::GetChildren() {
 	return _children;
 }
 
-std::shared_ptr<NodeXML> NodeXML::GetParent() const {
+std::shared_ptr<NodeXML> NodeXML::GetParent() {
 	return _parent;
 }

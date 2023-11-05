@@ -16,11 +16,13 @@ private:
 	PtrXmlNodes _children;
 	std::shared_ptr<NodeXML> _parent;
 public:
-	NodeXML(const std::string& tag, const std::string& value, const PtrXmlNodes& children);
+	NodeXML(const std::string& tag, const std::string& value);
 
 	//bool operator != (NodeXML const& other_node) const;
 	//bool operator == (NodeXML const& other_node) const;
 	//NodeXML& operator++();
+
+	void AppendChildren(std::shared_ptr<NodeXML> child);
 
 	void SetTag(const std::string& new_tag);
 	void SetValue(const std::string& new_value);
@@ -29,6 +31,6 @@ public:
 
 	std::string GetTag() const;
 	std::string GetValue() const;
-	PtrXmlNodes GetChildren() const;
-	std::shared_ptr<NodeXML> GetParent() const;
+	PtrXmlNodes& GetChildren();
+	std::shared_ptr<NodeXML> GetParent();
 };

@@ -71,6 +71,12 @@ bool XMLResource::IsValue(const std::string& line) {
 void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
     std::string line;
     std::string tag;
+    std::vector<std::string> element; // this element stores a tag and a value, it 
+    // is needed for convenient addition to the TreeXML
+
+    std::vector<std::string> tag_stack;
+    std::vector<std::string> value_stack;
+
     while (std::getline(xml_file, line)) {
         std::cout << "LINE: " << line << std::endl;
         if (line.empty()) {
@@ -83,16 +89,47 @@ void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
             if (line.find(">") == std::string::npos && line.find("<") != std::string::npos ||
                 line.find("<") == std::string::npos && line.find(">") != std::string::npos)
             {
+                //_treeXML.root = nullptr;
                 throw std::string{ "Error loading xml file (invalid xml file)" };
             }
             
             if (IsTag(line)) {
-                tag = line.substr(position_open_parenthesis, position_close_parenthesis - position_open_parenthesis);
-                //TODO: TreeXML adding NodeXML
+                if (line.find("/") == std::string::npos) {
+                    tag = line.substr(position_open_parenthesis + 1, position_close_parenthesis - position_open_parenthesis - 1);
+                    tag_stack.push_back(tag);
+                    element.push_back(tag);
+                }
+                else {
+                    tag_stack.pop_back();
+                    value_stack.pop_back();
+                }
+            }
+
+            if (IsValue(line)) {
+                std::string value = line;
+                value_stack.push_back(value);
+                element.push_back(value);
+                
+                //TODO: добавление элемента в дерево
+
+                if (_treeXML.IsEmpty()) {
+                    _treeXML.AppendRoot(element.at(0), element.at(1));
+                    //tag_stack.pop();
+                    //value_stack.pop();
+                }
+                else {
+                    std::string parent_tag = tag_stack.at(tag_stack.size() - 2);
+                    std::string parent_value = value_stack.at(tag_stack.size() - 2);
+                    TreeXML::iterator parent_iter = _treeXML.Find(parent_tag, parent_value);
+
+                    _treeXML.Add(element.at(0), element.at(1), parent_iter);
+                }
+
+                element.clear();
             }
 
         }
-        catch(const std::string& ex) {
+        catch (const std::string& ex) {
             std::cout << ex << std::endl;
             return;
         }
