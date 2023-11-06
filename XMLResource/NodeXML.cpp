@@ -30,8 +30,19 @@ NodeXML::NodeXML(const std::string& tag, const std::string& value) {
 //	}
 //}
 
-void NodeXML::AppendChildren(std::shared_ptr<NodeXML> child) {
+void NodeXML::AppendChild(const std::shared_ptr<NodeXML>& child) {
 	_children.push_back(child);
+	//child->_parent = shared_from_this();
+
+}
+
+void NodeXML::RemoveChild(const std::shared_ptr<NodeXML>& child) {
+	if (!_children.empty()) {
+		auto NewEnd = std::remove(std::begin(_children),
+			std::end(_children), child);
+
+		_children.erase(NewEnd, std::end(_children));
+	}
 }
 
 void NodeXML::SetTag(const std::string& new_tag) {
@@ -46,8 +57,10 @@ void NodeXML::SetValue(const std::string& new_value) {
 //	_children = new_children;
 //}
 
-void NodeXML::SetParent(const std::shared_ptr<NodeXML>& new_parent) {
+void NodeXML::SetParent(std::shared_ptr<NodeXML> new_parent) {
 	_parent = new_parent;
+	//_parent->RemoveChild(shared_from_this());
+	//new_parent->AppendChild(shared_from_this());
 }
 
 std::string NodeXML::GetTag() const {

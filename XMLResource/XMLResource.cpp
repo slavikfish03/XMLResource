@@ -78,7 +78,7 @@ void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
     std::vector<std::string> value_stack;
 
     while (std::getline(xml_file, line)) {
-        std::cout << "LINE: " << line << std::endl;
+        //std::cout << "LINE: " << line << std::endl;
         if (line.empty()) {
             continue;
         }
@@ -141,5 +141,6 @@ void XMLResource::Load(const std::string& filename) {
 	std::stringstream xml_file = ConvertToNormalForm(input_xml);
     LoadInTreeXML(xml_file);
     input_xml.close();
+    _treeXML.PrintTree();
 }
 

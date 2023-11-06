@@ -25,7 +25,7 @@ public:
 
 class TreeXML {
 private:
-	std::unique_ptr<NodeXML> _root;
+	std::shared_ptr<NodeXML> _root;
 public:
 	using iterator = IteratorXML<NodeXML>;
 	using const_iterator = IteratorXML<const NodeXML>;
