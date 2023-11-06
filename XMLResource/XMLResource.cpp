@@ -20,8 +20,6 @@ std::stringstream XMLResource::ConvertToNormalForm(std::ifstream& input_xml) {
             position_tabulation = line.find("\t", position_tabulation);
         }
 
-        //TODO: следить за количеством тегов, чтобы < и > одинаковое кол-во
-
         try {
             if (line.find(">") == std::string::npos && line.find("<") != std::string::npos ||
                 line.find("<") == std::string::npos && line.find(">") != std::string::npos) 
@@ -32,6 +30,7 @@ std::stringstream XMLResource::ConvertToNormalForm(std::ifstream& input_xml) {
         } 
         catch (const std::string& ex) {
             std::cout << ex << std::endl;
+            input_xml.close();
             return std::stringstream();
         }
 
@@ -78,7 +77,6 @@ void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
     std::vector<std::string> value_stack;
 
     while (std::getline(xml_file, line)) {
-        //std::cout << "LINE: " << line << std::endl;
         if (line.empty()) {
             continue;
         }
@@ -89,8 +87,9 @@ void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
             if (line.find(">") == std::string::npos && line.find("<") != std::string::npos ||
                 line.find("<") == std::string::npos && line.find(">") != std::string::npos)
             {
-                //_treeXML.root = nullptr;
+                xml_file.clear();
                 throw std::string{ "Error loading xml file (invalid xml file)" };
+
             }
             
             if (IsTag(line)) {
@@ -109,13 +108,9 @@ void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
                 std::string value = line;
                 value_stack.push_back(value);
                 element.push_back(value);
-                
-                //TODO: добавление элемента в дерево
 
                 if (_treeXML.IsEmpty()) {
                     _treeXML.AppendRoot(element.at(0), element.at(1));
-                    //tag_stack.pop();
-                    //value_stack.pop();
                 }
                 else {
                     std::string parent_tag = tag_stack.at(tag_stack.size() - 2);
@@ -124,7 +119,6 @@ void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
 
                     _treeXML.Add(element.at(0), element.at(1), parent_iter);
                 }
-
                 element.clear();
             }
 
@@ -136,11 +130,20 @@ void XMLResource::LoadInTreeXML(std::stringstream& xml_file) {
     }
 }
 
-void XMLResource::Load(const std::string& filename) {
+void XMLResource::LoadFromFile(const std::string& filename) {
 	std::ifstream input_xml(filename);
 	std::stringstream xml_file = ConvertToNormalForm(input_xml);
     LoadInTreeXML(xml_file);
     input_xml.close();
-    _treeXML.PrintTree();
+}
+
+void XMLResource::SaveInFile(const std::string& filename) {
+    std::ofstream output_xml(filename);
+    _treeXML.SaveTreeInFile(output_xml);
+}
+
+
+TreeXML& XMLResource::GetTreeXML() { 
+    return _treeXML; 
 }
 

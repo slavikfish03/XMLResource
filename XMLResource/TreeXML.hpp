@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <iostream>
+#include <fstream>
+#include <stack>
 
 template <typename T>
 class IteratorXML : public std::iterator<std::input_iterator_tag, T> {
@@ -19,8 +21,6 @@ public:
 	bool operator == (IteratorXML const& other_it) const;
 	typename IteratorXML::reference operator*() const;
 	IteratorXML& operator++();
-
-	//IteratorXML& Upward(IteratorXML const& iter);
 };
 
 class TreeXML {
@@ -32,10 +32,7 @@ public:
 
 	TreeXML();
 
-
-
 	void AppendRoot(const std::string& tag, const std::string& value);
-
 	bool IsEmpty();
 
 	iterator begin();
@@ -46,8 +43,12 @@ public:
 
 	IteratorXML<NodeXML>& Find(const std::string& tag, const std::string& value);
 	IteratorXML<NodeXML>& Add(const std::string& tag, const std::string& value, const IteratorXML<NodeXML>& iter_add);
-	bool Erase(IteratorXML<NodeXML> iter_delete);
+	bool Erase(const IteratorXML<NodeXML>& iter_delete);
 
 	void PrintTree();
+	void PrintChildren(NodeXML& node);
+
+	void SaveTreeInFile(std::ofstream& output_xml);
+	void SaveChildrenInFile(NodeXML& node, std::ofstream& output_xml);
 
 };

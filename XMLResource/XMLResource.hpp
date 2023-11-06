@@ -21,8 +21,8 @@ private:
 	bool IsValue(const std::string& line);
 public:
 	static std::unique_ptr<XMLResource> Create();
-	void Load(const std::string& filename);
+	void LoadFromFile(const std::string& filename);
+	void SaveInFile(const std::string& filename);
 
-
-
+	TreeXML& GetTreeXML();
 };

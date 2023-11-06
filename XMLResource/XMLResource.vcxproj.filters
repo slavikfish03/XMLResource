@@ -44,4 +44,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="output_example.xml">
+      <Filter>Файлы ресурсов</Filter>
+    </Xml>
+  </ItemGroup>
 </Project>
